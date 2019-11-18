@@ -1,3 +1,5 @@
+See https://data.openupstate.org/map-layers for existing open Greenville map layers and GeoJSON data.
+
 ### Why?
 Go to Google Maps, zoom into Greenville, SC and type "bike racks" or "dog parks". If you're lucky you get decent info, but inevitably you'll be looking at incomplete or irrelavant results. You may even get advertisments.
 
@@ -40,7 +42,7 @@ Now what?  Well, things get stale and maps die, that's what.
 * Rename your copy and start adding real "point" data, including geographic coordinates (longitude, latitude) and other properties
 
 ### Publish Your Google Spreadsheet
-* Go to (File -> Publish to Web).
+* Go to (File -> Advanced -> Publish to Web).
 * There are two drop-down boxes near the top of the box that opens.
 * For the left drop-down box select "Entire Document"
 * For the right drop-down box select "Comma-seperated values (.csv)
@@ -56,11 +58,11 @@ You should plan on only having 1 tab in the spreadsheet. However, if for some re
 Use Google's *Share* function to give *Edit* permissions. You should consider allowing "Anyone with the link" to edit the data and then all you need to do is share the edit URL with trusted people.
 
 ### Using PHP to Convert a Google Sheets CSV to a GeoJSON File
-The "CSV data source URL" to be used in the geojson.php PHP script is the URL from the Publish to Web step
+The "CSV data source URL" to be used in the geojson.php PHP script is the URL from the "File -> Publish to Web" step
 
 ex. ``https://docs.google.com/spreadsheets/d/{a-bunch-of-random-numbers-and-letters}/pub?output=csv``
 
-Insert that URL in the $googleSpreadsheetUrl variable near the top of geojson.php
+Insert that URL in the $googleSpreadsheetUrl variable near the top of geojson.php file in your editor / workspace.
 
 The column values are used in this example to generate the GeoJSON are hard-coded to include 4 fields: longitude, latitude, title, and notes.
 
@@ -75,14 +77,19 @@ Non-programming / manual ways to get latitude and longitude numbers
 * (OK) In Google Maps zoom into a point. The URL in your browser will contain the center point's latitude and longitude (in that order) ex: 34.8509174,-82.3987371
 * (Hard, but good for looking up lots of data) If you know how to do custom functions in Google Sheets then you can [convert an address into latitude and longitude](https://ctrlq.org/code/19992-google-maps-functions-for-google-script) with some customization.
 
-### Render a Leaflet Map Showing the GeoJSON Data
-The index.html file loads the GeoJSON file into a local Javascript variable. Point this at your GeoJSON file and Leaflet will 
-render the GeoJSON data. The magic line for loading a single layer map is 
-
-var geoJsonData = JSON.parse(readJSON('geojson.php'));
+### Rendering a Leaflet Map Showing the GeoJSON Data
+The index.html is where you look to see the actual map. There is already a line of code to load the geojson.php into a ``$geoJsonData`` Javascript variable and render that to the Leaflet map. So, all you have to do is open the index.html in your browser.
 
 Leaflet JS is using open MapQuest tiles. [As of July 2016](http://devblog.mapquest.com/2016/06/15/modernization-of-mapquest-results-in-changes-to-open-tile-access/),
 it's necessary to [register an account with MapQuest. Up to 15,000 views a month is free](https://developer.mapquest.com/plans).
+
+### Testing in Cloud 9
+* After [forking this base project and setup a C9 workspace](https://github.com/codeforgreenville/leaflet-google-sheets-template/blob/master/SC-CODES-README.md)
+* Save your changes (File-> Save or Ctrl + S)
+* Click green Run icon near the top of the C9 workspace and it will fire up an Apache web service running your environment
+* On the command line at the bottom of C9 you'll see a message like ``Starting Apache httpd, serving https://leaflet-wi-fi-map-allella.c9users.io/`` (your public workspace URL)
+* Visit your public workspace URL in a new browser tab and you should see your map with the points specified in the spreadsheet. This is showing you the index.html where the map is rendered.
+* You can also see your GeoJSON by adding /geojson.php to the end of your URL.
 
 ### Registering for Map Tiles
 
@@ -102,17 +109,10 @@ If using Mapquest then after registering for an account do the following:
 If you register with CloudMade you can use their map tiles instead, as described by Leaflet 
 example http://leafletjs.com/examples/geojson.html
 
-### Testing in Cloud 9
-* After [forking this base project and setup a C9 workspace](https://github.com/codeforgreenville/leaflet-google-sheets-template/blob/master/SC-CODES-README.md)
-* Save your changes (File-> Save or Ctrl + S)
-* Click green Run icon near the top of the C9 workspace and it will fire up an Apache web service running your environment
-* On the command line at the bottom of C9 you'll see a message like ``Starting Apache httpd, serving https://leaflet-wi-fi-map-allella.c9users.io/`` (your public workspace URL)
-* Visit your public workspace URL in a new browser tab and you should see your map with the points specified in the spreadsheet
-
 ### Multiple Layers and Advanced Leaflet
 [Leaflet has a bunch of other plug-ins and options](http://leafletjs.com/reference-1.0.0.html), so the maps can be tweaked in all sorts of ways.
 
 [Documentation for MapQuest and Leaflet](https://developer.mapquest.com/documentation/leaflet-plugins/maps/)
 
----
+----
 Original concept from [OpenData Day 2014 in Greenville SC](https://github.com/OpenUpstate/OpenDataDay2014)
